@@ -438,15 +438,17 @@ db.StringSet("test", "Connection successful!");
 - ✅ **Cost-Effective**: Pay only for what you use
 
 **Cons:**
-- ⚠️ Additional cost (starts ~$16/month for C0 tier)
+- ⚠️ Additional cost (starts ~R296/month for C0 tier)
 - ⚠️ Requires Azure subscription
 - ⚠️ Network latency (minimal with Azure)
 
-#### Pricing (Azure Redis Cache)
-- **Basic C0 (250 MB)**: ~$16/month - Development
-- **Basic C1 (1 GB)**: ~$56/month - Small production
-- **Standard C1 (1 GB)**: ~$101/month - Production (with replication)
-- **Premium**: Starting ~$467/month - Enterprise features
+#### Pricing (Azure Redis Cache - South African Rands)
+- **Basic C0 (250 MB)**: ~R296/month - Development
+- **Basic C1 (1 GB)**: ~R1,036/month - Small production
+- **Standard C1 (1 GB)**: ~R1,869/month - Production (with replication)
+- **Premium**: Starting ~R8,640/month - Enterprise features
+
+*Note: Prices are approximate conversions from USD to ZAR at rate of R18.50 per USD. Check Azure pricing page for current rates.*
 
 #### When to Use Each Provider
 
