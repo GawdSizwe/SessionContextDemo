@@ -28,9 +28,10 @@ This demo application demonstrates how to implement session state management in 
 **Key Demonstration Points:**
 - Custom SessionManager pattern for type-safe session access
 - JSON serialization/deserialization of complex objects
-- Distributed memory cache for session storage
+- **Multiple Cache Providers**: In-Memory, SQL Server, and **Redis (Azure)**
 - Modern, responsive UI with Bootstrap 5
 - Clean architecture with separation of concerns
+- Production-ready with Azure Redis Cache support
 
 ## Features
 
@@ -38,7 +39,10 @@ This demo application demonstrates how to implement session state management in 
 - **Custom SessionManager Pattern**: Type-safe wrapper around HttpContext.Session
 - **Generic Session Variables**: Strongly-typed session variable access
 - **JSON Serialization**: Automatic serialization of complex objects
-- **Distributed Cache Support**: Configured for distributed memory cache (extensible to Redis/SQL Server)
+- **Multiple Cache Providers**: 
+  - **In-Memory Cache** (Default) - Fast, for development
+  - **SQL Server Cache** - Persistent, for load-balanced environments
+  - **Redis Cache (Azure)** - High-performance, enterprise-grade, recommended for production
 - **Razor Pages Architecture**: Clean, page-focused web application model
 
 ### UI/UX Features
@@ -279,66 +283,183 @@ The UI follows modern web design principles with a tech-focused aesthetic:
 --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
 ```
 
-## Configuration Options
+## Configuration Options - Cache Providers
 
-### Distributed Memory Cache (Default)
+This application supports **three cache providers** for session state storage. Choose based on your deployment needs:
+
+### 1️⃣ In-Memory Cache (Default - Currently Active)
+
+**Best for:** Development, testing, single-server deployments
 
 ```csharp
+// In Program.cs
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 ```
 
 **Pros:**
-- Simple setup, no external dependencies
-- Fast in-process storage
-- Perfect for development and single-server deployments
+- ✅ Simple setup, no external dependencies
+- ✅ Fast in-process storage
+- ✅ Perfect for development and single-server deployments
 
 **Cons:**
-- Not suitable for load-balanced environments
-- Data lost on application restart
+- ❌ Not suitable for load-balanced environments
+- ❌ Data lost on application restart
+- ❌ Limited to single server memory
 
-### SQL Server Cache (Alternative)
+---
+
+### 2️⃣ SQL Server Cache
+
+**Best for:** Load-balanced environments, persistent session storage
 
 ```csharp
-// Install tool: dotnet tool install --global dotnet-sql-cache
-// Create table: dotnet sql-cache create "ConnectionString" dbo SessionState
+// Step 1: Install the SQL Cache tool
+// dotnet tool install --global dotnet-sql-cache
 
+// Step 2: Create the session state table
+// dotnet sql-cache create "Data Source=(local);Initial Catalog=SessionDB;Integrated Security=True" dbo SessionState
+
+// Step 3: Configure in Program.cs
 builder.Services.AddDistributedSqlServerCache(options =>
 {
     options.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.SchemaName = "dbo";
     options.TableName = "SessionState";
 });
+
+builder.Services.AddSession();
 ```
 
 **Pros:**
-- Persistent across application restarts
-- Works with load-balanced servers
-- Familiar SQL Server infrastructure
+- ✅ Persistent across application restarts
+- ✅ Works with load-balanced servers
+- ✅ Familiar SQL Server infrastructure
+- ✅ Built-in SQL Server tools and monitoring
 
 **Cons:**
-- Requires SQL Server setup
-- Slightly slower than memory cache
+- ⚠️ Requires SQL Server setup and maintenance
+- ⚠️ Slightly slower than memory cache
+- ⚠️ Database overhead
 
-### Redis Cache (Alternative)
+---
+
+### 3️⃣ Redis Cache with Azure (⭐ RECOMMENDED FOR PRODUCTION)
+
+**Best for:** Enterprise production environments, high-traffic applications, cloud deployments
+
+#### Why Redis?
+- **High Performance**: In-memory data structure store
+- **Horizontal Scaling**: Distribute load across multiple nodes
+- **Cloud-Ready**: Native Azure integration
+- **Enterprise-Grade**: Used by Fortune 500 companies
+- **Rich Data Structures**: Beyond simple key-value storage
+- **Automatic Failover**: High availability with Redis cluster
+
+#### Azure Redis Cache Setup
+
+**Step 1: Create Azure Redis Cache**
+```bash
+# Using Azure Portal
+1. Navigate to Azure Portal (portal.azure.com)
+2. Click "Create a resource"
+3. Search for "Azure Cache for Redis"
+4. Click "Create"
+5. Configure:
+   - Subscription: Choose your subscription
+   - Resource Group: Create or select existing
+   - DNS Name: your-app-cache (must be unique)
+   - Location: Choose closest to your app
+   - Pricing tier: 
+     * Basic C0 (250 MB) - Development/Testing
+     * Standard C1 (1 GB) - Production (recommended)
+     * Premium - Enterprise features (clustering, persistence)
+6. Click "Review + Create"
+7. Wait for deployment (5-10 minutes)
+```
+
+**Step 2: Get Connection String**
+```bash
+# In Azure Portal:
+1. Navigate to your Redis Cache resource
+2. Go to "Access keys" under Settings
+3. Copy "Primary connection string (StackExchange.Redis)"
+
+# Format: your-cache.redis.cache.windows.net:6380,password=YOUR_KEY,ssl=True,abortConnect=False
+```
+
+**Step 3: Configure Application**
 
 ```csharp
-// NuGet: Microsoft.Extensions.Caching.StackExchangeRedis
+// Install NuGet Package:
+// dotnet add package Microsoft.Extensions.Caching.StackExchangeRedis
 
+// Add to appsettings.json
+{
+  "ConnectionStrings": {
+    "AzureRedis": "your-cache.redis.cache.windows.net:6380,password=YOUR_ACCESS_KEY,ssl=True,abortConnect=False"
+  }
+}
+
+// Configure in Program.cs
 builder.Services.AddStackExchangeRedisCache(options => 
 {
     options.Configuration = builder.Configuration.GetConnectionString("AzureRedis");
+    options.InstanceName = "SessionState_"; // Optional prefix for keys
+});
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
+    options.Cookie.IsEssential = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 ```
 
+**Step 4: Test Connection**
+```csharp
+// Optional: Test Redis connection on startup
+var redis = ConnectionMultiplexer.Connect(configuration.GetConnectionString("AzureRedis"));
+var db = redis.GetDatabase();
+db.StringSet("test", "Connection successful!");
+```
+
+#### Redis Cache - Pros & Cons
+
 **Pros:**
-- High performance
-- Scales horizontally
-- Cloud-ready (Azure Redis Cache)
+- ✅ **Extreme Performance**: Microsecond response times
+- ✅ **Horizontal Scaling**: Add nodes as traffic grows
+- ✅ **Load Balancer Ready**: Perfect for web farms
+- ✅ **Cloud Native**: Managed service, no maintenance
+- ✅ **High Availability**: Built-in replication and failover
+- ✅ **Monitoring**: Azure Monitor integration
+- ✅ **Security**: SSL/TLS encryption, VNet support
+- ✅ **Cost-Effective**: Pay only for what you use
 
 **Cons:**
-- Requires Redis server
-- Additional infrastructure cost
+- ⚠️ Additional cost (starts ~$16/month for C0 tier)
+- ⚠️ Requires Azure subscription
+- ⚠️ Network latency (minimal with Azure)
+
+#### Pricing (Azure Redis Cache)
+- **Basic C0 (250 MB)**: ~$16/month - Development
+- **Basic C1 (1 GB)**: ~$56/month - Small production
+- **Standard C1 (1 GB)**: ~$101/month - Production (with replication)
+- **Premium**: Starting ~$467/month - Enterprise features
+
+#### When to Use Each Provider
+
+| Scenario | Recommended Cache | Why |
+|----------|------------------|-----|
+| Local Development | In-Memory | Fast, simple, no setup |
+| Testing Environment | In-Memory or SQL | Depends on test requirements |
+| Single Server Production | SQL Server | Persistent, reliable |
+| Load-Balanced Production | Redis (Azure) | High performance, scalable |
+| High-Traffic Application | Redis (Azure) | Best performance under load |
+| Enterprise Application | Redis (Azure) | Enterprise features, SLA |
+| Cost-Sensitive | SQL Server | No additional service cost |
+| Cloud-First | Redis (Azure) | Native cloud integration |
 
 ## Learning Objectives
 

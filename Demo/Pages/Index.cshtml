@@ -45,12 +45,93 @@
 
 <div class="row justify-content-center mt-4">
     <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                <h6 class="text-white mb-0"><strong>Supported Cache Providers</strong></h6>
+            </div>
+            <div class="card-body">
+                <div class="cache-option mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="cache-icon me-3" style="width: 40px; height: 40px; background: #e7f5ff; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <strong style="color: #0d6efd;">1</strong>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1"><strong>In-Memory Cache</strong> <span class="badge bg-success">Current</span></h6>
+                            <small class="text-muted">Fast, in-process storage for development and single-server deployments</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cache-option mb-3">
+                    <div class="d-flex align-items-center">
+                        <div class="cache-icon me-3" style="width: 40px; height: 40px; background: #fff3cd; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <strong style="color: #856404;">2</strong>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1"><strong>SQL Server Cache</strong></h6>
+                            <small class="text-muted">Persistent session storage with SQL Server for load-balanced environments</small>
+                            <div class="mt-1">
+                                <code style="font-size: 0.75rem;">builder.Services.AddDistributedSqlServerCache()</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cache-option p-3" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); border-radius: 10px;">
+                    <div class="d-flex align-items-center">
+                        <div class="cache-icon me-3" style="width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <strong style="color: white;">3</strong>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 text-white"><strong>Redis Cache (Azure)</strong> <span class="badge bg-light text-dark">Recommended</span></h6>
+                            <small class="text-white" style="opacity: 0.95;">
+                                High-performance, scalable cache with Azure Redis. Perfect for enterprise production environments.
+                            </small>
+                            <div class="mt-2">
+                                <code class="text-white" style="background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; font-size: 0.75rem;">
+                                    builder.Services.AddStackExchangeRedisCache()
+                                </code>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-white d-block" style="opacity: 0.9;">
+                                    <strong>Azure Setup:</strong> Create Redis Cache in Azure Portal → Get Access Key → Configure connection string
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
         <div class="alert alert-info border-0" style="border-radius: 12px; border-left: 4px solid #00d4ff;">
             <h6 class="alert-heading"><strong>Implementation Details</strong></h6>
             <p class="mb-0">
                 This application demonstrates ASP.NET Core session state management with a custom SessionManager pattern.
-                Session data is serialized to JSON and persisted across multiple HTTP requests.
+                Session data is serialized to JSON and persisted across multiple HTTP requests. Switch between cache providers
+                by updating the configuration in <code>Program.cs</code>.
             </p>
         </div>
     </div>
 </div>
+
+<style>
+    .cache-option {
+        transition: all 0.3s ease;
+    }
+    
+    .cache-option:hover {
+        transform: translateX(5px);
+    }
+    
+    code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+    }
+</style>
