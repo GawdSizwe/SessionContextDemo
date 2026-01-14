@@ -138,7 +138,7 @@ This demo application demonstrates how to implement session state management in 
 
 1. Enter a first name on the home page
 2. Click "Next" to proceed to the details page
-3. Fill in all required fields (Last Name, Address, City, State, ZIP)
+3. Fill in all required fields (Last Name, Address, City, Province, Postal Code)
 4. Click "Preview" to review your information
 5. Click "Save" to complete the demo
 

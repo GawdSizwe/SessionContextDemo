@@ -26,7 +26,7 @@
                 
                 <div class="data-display">
                     <div class="data-label">Location</div>
-                    <div>@Model.Data.City, @Model.Data.State @Model.Data.Zipcode</div>
+                    <div>@Model.Data.City, @Model.Data.Province @Model.Data.PostalCode</div>
                 </div>
 
                 <div class="mt-4 p-3" style="background: #e7f5ff; border-radius: 10px; border-left: 4px solid #00d4ff;">
@@ -48,23 +48,15 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<div class="row justify-content-center mt-4">
-    <div class="col-lg-8">
-        <div class="alert alert-success border-0" style="border-radius: 12px; border-left: 4px solid #10b981; display: none;" id="successAlert">
+        <div class="alert alert-success border-0 mt-4" style="border-radius: 12px; border-left: 4px solid #10b981; display: none;" id="successAlert">
             <h6 class="alert-heading"><strong>Success</strong></h6>
             <p class="mb-0">
                 Your information has been processed successfully. The session state has been maintained throughout this multi-page form workflow.
             </p>
         </div>
-    </div>
-</div>
 
-<div class="row justify-content-center mt-3">
-    <div class="col-lg-8">
-        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+        <div class="card mt-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
             <div class="card-body text-white">
                 <h6 class="card-title text-white"><strong>Technical Implementation</strong></h6>
                 <ul class="mb-0" style="font-size: 0.9rem;">
@@ -103,17 +95,10 @@
 
 <script>
     function handleSave() {
-        // Show success message
         document.getElementById('successAlert').style.display = 'block';
-        
-        // Scroll to success message
         document.getElementById('successAlert').scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        // Optional: You could add actual form submission here
-        // In this demo, we're just showing the success message
-        
         setTimeout(() => {
-            // You could redirect or perform other actions here
             console.log('Data saved successfully (demo mode)');
         }, 2000);
     }
