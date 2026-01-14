@@ -1,0 +1,121 @@
+﻿@page
+@model Demo.Pages.ConfirmModel
+@{
+    ViewData["Title"] = "Confirm Information";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card animate-in">
+            <img class="card-img-top" src="/subtitle.png" alt="Confirmation">
+            <div class="card-body">
+                <h5 class="card-title">✅ @Model.Data.FirstName, does this look right?</h5>
+                <p class="card-text mb-4">
+                    Please review your information before saving. You can go back to make changes if needed.
+                </p>
+                
+                <div class="data-display">
+                    <div class="data-label">Full Name</div>
+                    <div>@Model.Data.FirstName @Model.Data.LastName</div>
+                </div>
+                
+                <div class="data-display">
+                    <div class="data-label">Street Address</div>
+                    <div>@Model.Data.Address</div>
+                </div>
+                
+                <div class="data-display">
+                    <div class="data-label">Location</div>
+                    <div>@Model.Data.City, @Model.Data.State @Model.Data.Zipcode</div>
+                </div>
+
+                <div class="mt-4 p-3" style="background: #e7f5ff; border-radius: 10px; border-left: 4px solid #00d4ff;">
+                    <small>
+                        <strong>🔐 Session Data Retrieved:</strong> This information was retrieved from the session state using 
+                        <code class="text-primary">SessionVar.UserDataValues</code>
+                    </small>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <a href="/Index" class="btn btn-outline-secondary">
+                    ← Start Over
+                </a>
+                <div>
+                    <small class="text-muted me-3">Step 3 of 3</small>
+                    <button type="button" class="btn btn-primary" onclick="handleSave()">
+                        💾 Save It!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="alert alert-success border-0" style="border-radius: 12px; border-left: 4px solid #10b981; display: none;" id="successAlert">
+            <h6 class="alert-heading"><strong>🎉 Success!</strong></h6>
+            <p class="mb-0">
+                Your information has been processed. In a real application, this would be saved to a database.
+                The session state has been successfully managed throughout this multi-page form.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-3">
+    <div class="col-lg-8">
+        <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+            <div class="card-body text-white">
+                <h6 class="card-title text-white"><strong>🚀 Technical Implementation</strong></h6>
+                <ul class="mb-0" style="font-size: 0.9rem;">
+                    <li><strong>Session Storage:</strong> Distributed Memory Cache</li>
+                    <li><strong>Serialization:</strong> System.Text.Json</li>
+                    <li><strong>Pattern:</strong> Custom SessionManager with typed SessionVar</li>
+                    <li><strong>Framework:</strong> ASP.NET Core 7.0 Razor Pages</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-outline-secondary {
+        border-radius: 10px;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        border: 2px solid #6c757d;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-secondary:hover {
+        background: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    code {
+        background: rgba(0, 0, 0, 0.05);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+    }
+</style>
+
+<script>
+    function handleSave() {
+        // Show success message
+        document.getElementById('successAlert').style.display = 'block';
+        
+        // Scroll to success message
+        document.getElementById('successAlert').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Optional: You could add actual form submission here
+        // In this demo, we're just showing the success message
+        
+        setTimeout(() => {
+            // You could redirect or perform other actions here
+            console.log('Data saved successfully (demo mode)');
+        }, 2000);
+    }
+</script>

@@ -1,0 +1,64 @@
+﻿@page
+@model Demo.Pages.PrivacyModel
+@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card animate-in">
+            <div class="card-body">
+                <h5 class="card-title">🔒 Privacy Policy</h5>
+                
+                <div class="mt-4">
+                    <h6 class="text-gradient"><strong>Session Data Storage</strong></h6>
+                    <p>
+                        This application demonstrates ASP.NET Core session state management. Session data is stored 
+                        temporarily in server memory and is not persisted to any database.
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <h6 class="text-gradient"><strong>Data Collection</strong></h6>
+                    <p>
+                        The following information is collected for demonstration purposes only:
+                    </p>
+                    <ul>
+                        <li>First Name and Last Name</li>
+                        <li>Address Information (Street, City, State, ZIP Code)</li>
+                    </ul>
+                </div>
+
+                <div class="mt-4">
+                    <h6 class="text-gradient"><strong>Data Retention</strong></h6>
+                    <p>
+                        Session data is retained only for the duration of your browser session. Once you close your 
+                        browser or the session expires (typically after 20 minutes of inactivity), all data is automatically 
+                        removed from server memory.
+                    </p>
+                </div>
+
+                <div class="mt-4">
+                    <h6 class="text-gradient"><strong>Security</strong></h6>
+                    <p>
+                        This is a demonstration application. In a production environment, additional security measures 
+                        would be implemented, including:
+                    </p>
+                    <ul>
+                        <li>HTTPS encryption for data transmission</li>
+                        <li>Secure session cookie configuration</li>
+                        <li>CSRF protection (Anti-forgery tokens)</li>
+                        <li>Input validation and sanitization</li>
+                    </ul>
+                </div>
+
+                <div class="mt-4 p-3" style="background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+                    <small>
+                        <strong>⚠️ Demo Notice:</strong> This application is for educational purposes only. 
+                        Do not enter real personal information.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

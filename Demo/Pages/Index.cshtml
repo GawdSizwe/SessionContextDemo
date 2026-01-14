@@ -1,0 +1,56 @@
+﻿@page
+@model Demo.Pages.IndexModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <form method="post">
+            <div class="card animate-in">
+                <img class="card-img-top" src="/title.png" alt="Session State Demo">
+                <div class="card-body">
+                    <h5 class="card-title">👋 Welcome to Session State Manager</h5>
+                    <p class="card-text mb-4">
+                        Let's get started with capturing your information using ASP.NET Core session state management.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="name" class="data-label">First Name</label>
+                            <input type="text" 
+                                   name="name" 
+                                   class="form-control" 
+                                   id="name" 
+                                   placeholder="Enter your first name" 
+                                   required
+                                   autocomplete="given-name">
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <strong>💡 Tech Note:</strong> Your data will be stored in-memory session state using distributed memory cache.
+                        </small>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Step 1 of 3</small>
+                    <button type="submit" class="btn btn-primary">
+                        Next →
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-lg-8">
+        <div class="alert alert-info border-0" style="border-radius: 12px; border-left: 4px solid #00d4ff;">
+            <h6 class="alert-heading"><strong>🔧 What's Happening Behind the Scenes?</strong></h6>
+            <p class="mb-0">
+                This demo showcases ASP.NET Core's session state management with a custom SessionManager pattern.
+                Session data is serialized to JSON and stored across multiple requests.
+            </p>
+        </div>
+    </div>
+</div>
